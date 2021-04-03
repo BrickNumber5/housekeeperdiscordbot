@@ -48,6 +48,49 @@ client.on( "ready", async ( ) => {
               required: true
             }
           ]
+        },
+        {
+          name: "config",
+          description: "Set which roles are considered publicly availabe ( Admin Only )",
+          type: 2,
+          options: [
+            {
+              name: "add",
+              description: "Set a role as publicly availabe ( Admin only )",
+              type: 1,
+              options: [
+                {
+                  name: "role",
+                  description: "The role to make publicly available",
+                  type: 8,
+                  required: true
+                }
+              ]
+            },
+            {
+              name: "remove",
+              description: "Set a role as not publicly availabe ( Admin only )",
+              type: 1,
+              options: [
+                {
+                  name: "role",
+                  description: "The role to make not publicly available",
+                  type: 8,
+                  required: true
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List the publicly available roles",
+              type: 1
+            },
+            {
+              name: "clear",
+              description: "Clear the list of publicly available roles ( Admin only )",
+              type: 1
+            }
+          ]
         }
       ]
     }
@@ -69,10 +112,10 @@ client.on( "ready", async ( ) => {
       console.log( `${userObj.user.username} used /role ${mode} in ${guildObj.name} with role @${ roleObj.name }` )
       if ( mode === "add" ) {
         userObj.roles.add( roleObj )
-        reply( interaction, `Gave you ${roleObj}` )
+        reply( interaction, `Gave you ${ roleObj }` )
       } else if ( mode === "remove" ) {
         userObj.roles.remove( roleObj )
-        reply( interaction, `Removed ${roleObj} from you` )
+        reply( interaction, `Removed ${ roleObj } from you` )
       }
     }
   } )
