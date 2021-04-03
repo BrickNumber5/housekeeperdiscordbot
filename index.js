@@ -1,9 +1,13 @@
 const fs = require( "fs" )
 const { token } = require( "./config.json" )
+const greetings = require( "./greetings" ),
+      greetingsRegex = new RegExp( greetings.join("|"), "i" )
+console.log( greetingsRegex )
 
 console.log("Started up Housekeeper")
 
 const discordJs = require( "discord.js" )
+require( "./extendedmessage.js" )
 const client = new discordJs.Client( )
 const guildId = "827641404863676456"
 
@@ -208,7 +212,9 @@ const reply = ( interaction, message ) => {
 }
 
 client.on( "message", message => {
-  //console.log( message )
+  if ( message.mentions.users.has( client.user.id ) && !message.author.bot && greetingsRegex.test( message.content ) ) {
+    message.inlineReply( "Hi!" )
+  }
 } )
 
 const mkfancylist = arr => {
@@ -219,6 +225,13 @@ const mkfancylist = arr => {
   let last = arr.pop( )
   return arr.join( ", " ) + ", and " + last
 }
+
+process.on( "SIGINT", async ( ) => {
+  //Disconnect from discord before closing
+  client.destroy( )
+  await new Promise( ( resolve ) => setTimeout( resolve, 0 ) )
+  process.exit( )
+} )
 
 const isUserAdmin = guildMember => guildMember.hasPermission( 8 )
 
